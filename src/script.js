@@ -15,14 +15,38 @@ const scene = new THREE.Scene()
 // Objects
 const geometry = new THREE.TorusGeometry( .7, .2, 16, 100 );
 
+
+const particleGeo  = new THREE.BufferGeometry; 
+
+const count = 4900;
+
+const posArray = new Float32Array(count * 3);
+
+for(let i=0; i< count *3;i++){
+
+    posArray[i] = (Math.random() -0.5)  * 4.5;
+}
+
+particleGeo.setAttribute('position' , new THREE.BufferAttribute(posArray , 3))
+
 // Materials
 
-const material = new THREE.MeshBasicMaterial()
-material.color = new THREE.Color(0xff0000)
+const material = new THREE.PointsMaterial({
+size: 0.003
+
+})
+
+const particleMaterial = new THREE.PointsMaterial({
+    size: 0.002,
+    transparent: true,
+    color: 'orange'
+})
 
 // Mesh
-const sphere = new THREE.Mesh(geometry,material)
+const sphere = new THREE.Points(geometry,material)
+const particleGeometry = new THREE.Points(particleGeo , particleMaterial)
 scene.add(sphere)
+scene.add(particleGeometry)
 
 // Lights
 
@@ -78,9 +102,21 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+renderer.setClearColor( new THREE.Color('#21282a'), 1)
 /**
  * Animate
  */
+
+document.addEventListener('mousemove', onDocumentMouse)
+
+
+let mouseX =0;
+let mouseY =0;
+
+function onDocumentMouse(event){
+mouseX = event.clientX;
+mouseY = event.clientY;
+}
 
 const clock = new THREE.Clock()
 
@@ -88,10 +124,13 @@ const tick = () =>
 {
 
     const elapsedTime = clock.getElapsedTime()
-
+     particleGeometry.rotation.y =  -.1 * elapsedTime
     // Update objects
     sphere.rotation.y = .5 * elapsedTime
-
+    if(mouseX > 0) {
+    particleGeometry.rotation.x =  -mouseY * elapsedTime *0.00008
+    particleGeometry.rotation.y =  -mouseX * elapsedTime *0.00008
+    }
     // Update Orbital Controls
     // controls.update()
 

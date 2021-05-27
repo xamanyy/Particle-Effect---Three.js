@@ -13,8 +13,67 @@ body
 
 .webgl
 {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     outline: none;
+}
+
+h1 ,p {
+    z-index: 1;
+    color: white;
+    animation: anim1 2s ease-in;
+}
+
+.container{
+   
+    height: 100%;
+     display:grid;
+     place-content: center;
+}
+
+.content{
+     z-index: 1;
+   display:grid;
+   place-content: center;
+   position: relative;
+}
+.content:before{
+content: "";
+z-index: 1;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+border-bottom: 1px solid white;
+animation: anim 1.8s ease;
+
+}
+
+@keyframes anim {
+
+    from {
+transform: scaleX(0);
+    }
+    
+    to {
+        transform: scaleX(1);
+    };
+}
+
+
+
+@keyframes anim1 {
+from{
+     clip-path: polygon(0 0,100% 0,100% 0,0 0);
+    
+}
+to {
+    clip-path: polygon(0 0,100% 0,100% 100%,0% 100%);
+}
+}
+
+
+section {
+    height: 100vh;
 }
